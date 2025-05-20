@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestConexionVehiculos {
-    public static void main(String[] args) throws SQLException {
+    
+    
+    public static void main(String[] args){
         // 1. Probar conexión
         Connection conn = ConexionBD.obtenerConexion();
-        
-        if (conn != null) {
+          Menu_principal menu_principal = new Menu_principal();
+        menu_principal.setVisible(true);
+      /*  if (conn != null) {
             try {
                 // 2. Crear tablas si no existen
                 crearTablas(conn);
@@ -28,7 +31,7 @@ public class TestConexionVehiculos {
             } finally {
                 ConexionBD.cerrarConexion(conn);
             }
-        }
+        }*/
     }
     
     private static void crearTablas(Connection conn) throws SQLException {
@@ -82,28 +85,30 @@ public class TestConexionVehiculos {
                 }
             }
         }
+        ConexionBD.cerrarConexion(conn);
         return -1;
     }
     
-    private static void insertarVehiculoEjemplo(Connection conn, int idCliente) throws SQLException {
+    public void insertarVehiculoEjemplo(Connection conn, int idCliente,String serial,String marca,String motor,String chasis,String tipo_chasis,String tipo_vehiculo,String vin,String obsevaciones) throws SQLException {
         String sql = "INSERT INTO vehiculos (id_cliente, serial, marca, motor, chasis, " +
                      "chasis_tipo, tipo_vehiculo, vin, observaciones) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, idCliente);
-            pstmt.setString(2, "SER123456");
-            pstmt.setString(3, "Toyota");
-            pstmt.setString(4, "MOT7890");
-            pstmt.setString(5, "CHS456789");
-            pstmt.setString(6, "Tipo A");
-            pstmt.setString(7, "Camioneta");
-            pstmt.setString(8, "VIN1234567890ABCDE");
-            pstmt.setString(9, "Vehículo en buen estado");
+            pstmt.setString(2, serial);
+            pstmt.setString(3, marca);
+            pstmt.setString(4, motor);
+            pstmt.setString(5, chasis);
+            pstmt.setString(6, tipo_chasis);
+            pstmt.setString(7, tipo_vehiculo);
+            pstmt.setString(8, vin);
+            pstmt.setString(9, obsevaciones);
             
             int filas = pstmt.executeUpdate();
             System.out.println(filas + " vehículo(s) insertado(s)");
         }
+        ConexionBD.cerrarConexion(conn);
     }
     
     private static List<String> listarClientes(Connection conn) throws SQLException {

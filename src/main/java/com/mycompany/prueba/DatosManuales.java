@@ -4,10 +4,12 @@
  */
 package com.mycompany.prueba;
 
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,6 +17,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -25,6 +35,48 @@ public class DatosManuales extends javax.swing.JFrame {
     /**
      * Creates new form DatosManuales
      */
+    public DatosManuales(JTextArea chasis_text, JButton jButton1, JButton jButton2, JLabel jLabel1, JLabel jLabel10, JLabel jLabel11, JLabel jLabel2, JLabel jLabel3, JLabel jLabel4, JLabel jLabel5, JLabel jLabel6, JLabel jLabel7, JLabel jLabel8, JLabel jLabel9, JPanel jPanel1, JPanel jPanel2, JPanel jPanel3, JScrollPane jScrollPane1, JScrollPane jScrollPane10, JScrollPane jScrollPane2, JScrollPane jScrollPane3, JScrollPane jScrollPane4, JScrollPane jScrollPane5, JScrollPane jScrollPane6, JScrollPane jScrollPane7, JScrollPane jScrollPane8, JScrollPane jScrollPane9, JTextArea jTextArea1, JTextArea jTextArea2, JTextArea marca_text, JTextArea motor_text, JTextArea observaiones_text, JTextArea serial_text, JTextArea tipo_chasis_text, JTextArea tipo_vehiculo_text, JTextArea vin_text) throws HeadlessException {
+        this.chasis_text = chasis_text;
+        this.jButton1 = jButton1;
+        this.jButton2 = jButton2;
+        this.jLabel1 = jLabel1;
+        this.jLabel10 = jLabel10;
+        this.jLabel11 = jLabel11;
+        this.jLabel2 = jLabel2;
+        this.jLabel3 = jLabel3;
+        this.jLabel4 = jLabel4;
+        this.jLabel5 = jLabel5;
+        this.jLabel6 = jLabel6;
+        this.jLabel7 = jLabel7;
+        this.jLabel8 = jLabel8;
+        this.jLabel9 = jLabel9;
+        this.jPanel1 = jPanel1;
+        this.jPanel2 = jPanel2;
+        this.jPanel3 = jPanel3;
+        this.jScrollPane1 = jScrollPane1;
+        this.jScrollPane10 = jScrollPane10;
+        this.jScrollPane2 = jScrollPane2;
+        this.jScrollPane3 = jScrollPane3;
+        this.jScrollPane4 = jScrollPane4;
+        this.jScrollPane5 = jScrollPane5;
+        this.jScrollPane6 = jScrollPane6;
+        this.jScrollPane7 = jScrollPane7;
+        this.jScrollPane8 = jScrollPane8;
+        this.jScrollPane9 = jScrollPane9;
+        this.jTextArea1 = jTextArea1;
+        this.jTextArea2 = jTextArea2;
+        this.marca_text = marca_text;
+        this.motor_text = motor_text;
+        this.observaiones_text = observaiones_text;
+        this.serial_text = serial_text;
+        this.tipo_chasis_text = tipo_chasis_text;
+        this.tipo_vehiculo_text = tipo_vehiculo_text;
+        this.vin_text = vin_text;
+    }
+
+    Connection conn = ConexionBD.obtenerConexion();
+    TestConexionVehiculos testConexionVehiculos = new TestConexionVehiculos();
+
     public DatosManuales() {
         initComponents();
     }
@@ -370,6 +422,36 @@ public class DatosManuales extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+
+        String serial = serial_text.getText();
+        String marca = marca_text.getText();
+        String motor = motor_text.getText();
+        String chasis = chasis_text.getText();
+        String chasis_tipo = tipo_chasis_text.getText();
+        String tipo_vehiculo = tipo_vehiculo_text.getText();
+        String vin = vin_text.getText();
+        String observaciones = observaiones_text.getText();
+
+        Connection conn = ConexionBD.obtenerConexion();
+
+        if (conn != null) {
+            try {
+                // Crear instancia de TestConexionVehiculos
+                TestConexionVehiculos test = new TestConexionVehiculos();
+
+                // ID de un cliente existente (debes obtenerlo o crearlo primero)
+                int idClienteExistente = 1; // Cambia esto por un ID real
+
+                // Llamar al método
+                test.insertarVehiculoEjemplo(conn, idClienteExistente, serial, marca, motor, chasis, chasis_tipo, tipo_vehiculo, vin, observaciones);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                ConexionBD.cerrarConexion(conn);
+            }
+        }
+
     }
 
 // Método auxiliar para establecer valores en celdas (debe estar en la misma clase)
